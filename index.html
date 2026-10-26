@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080810">
+<meta name="description" content="Vikas — Computer Science student, AI enthusiast, creative developer and content creator.">
+<title>VIKAS® — Creative Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #080810;
+  --panel: #10101b;
+  --text: #f4f2ff;
+  --muted: #9996ad;
+  --purple: #a78bfa;
+  --cyan: #7cecff;
+  --line: rgba(255,255,255,.12);
+  --font: "Space Grotesk", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+img { display: block; width: 100%; }
+::selection { background: var(--purple); color: #080810; }
+
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0; background: var(--purple);
+  z-index: 1000;
+}
+.noise {
+  position: fixed; inset: 0; pointer-events: none;
+  z-index: 10; opacity: .10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+}
+.ambient {
+  position: fixed; width: 420px; height: 420px;
+  border-radius: 50%; filter: blur(130px);
+  opacity: .14; pointer-events: none; z-index: -1;
+  background: #7754ff; top: 10%; left: -220px;
+}
+.ambient.two {
+  background: #00cfff; left: auto; right: -250px;
+  top: 55%; opacity: .08;
+}
+.container { width: min(1160px, 90%); margin: auto; }
+.mono {
+  font-family: "DM Mono", monospace;
+  text-transform: uppercase; letter-spacing: .12em;
+}
+.muted { color: var(--muted); }
+
+nav {
+  position: fixed; z-index: 100; top: 14px;
+  left: 50%; transform: translateX(-50%);
+  width: min(1120px, 94%);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 20px; border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(8,8,16,.78);
+  backdrop-filter: blur(20px);
+}
+.logo { font-weight: 700; font-size: 21px; letter-spacing: -.07em; }
+.logo span { color: var(--purple); }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 12px; color: #c1bfd0; transition: color .3s; }
+.nav-links a:hover { color: var(--purple); }
+.nav-cta {
+  padding: 10px 15px; border-radius: 9px;
+  background: var(--text); color: #11111a !important;
+  font-weight: 700;
+}
+.menu-btn {
+  display: none; color: white; border: 0;
+  background: transparent; font-size: 25px; cursor: pointer;
+}
+
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  position: relative; padding: 150px 0 80px;
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1.15fr .85fr;
+  gap: 35px; align-items: center;
+}
+.availability {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 9px 13px; border: 1px solid var(--line);
+  border-radius: 50px; font-size: 11px;
+  color: #d6d2e8; margin-bottom: 28px;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #8dffb3; box-shadow: 0 0 12px #8dffb3;
+}
+h1 {
+  font-size: clamp(60px, 8.7vw, 116px);
+  line-height: .91; letter-spacing: -.085em;
+  font-weight: 700;
+}
+.gradient-text {
+  background: linear-gradient(100deg, #c4b5fd, #8be9ff 70%, #c4b5fd);
+  background-size: 200%;
+  color: transparent; background-clip: text;
+  animation: gradient 6s linear infinite;
+}
+@keyframes gradient { to { background-position: 200% center; } }
+
+.hero-desc {
+  margin-top: 28px; max-width: 440px;
+  font-size: 15px; line-height: 1.9; color: var(--muted);
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 12px; padding: 14px 19px; border-radius: 10px;
+  border: 1px solid var(--line); font-size: 12px;
+  transition: transform .3s, background .3s, border .3s;
+}
+.btn:hover { transform: translateY(-4px); }
+.btn-primary { background: var(--text); color: var(--bg); font-weight: 700; }
+.btn-secondary:hover { border-color: var(--purple); }
+
+.hero-art {
+  position: relative; min-height: 440px;
+  display: grid; place-items: center;
+}
+.art-ring {
+  position: absolute; width: 95%; aspect-ratio: 1;
+  border: 1px solid rgba(167,139,250,.23);
+  border-radius: 50%; animation: spin 28s linear infinite;
+}
+.art-ring::before {
+  content: ""; position: absolute; width: 10px; height: 10px;
+  top: 14%; left: 15%; border-radius: 50%;
+  background: var(--cyan); box-shadow: 0 0 24px var(--cyan);
+}
+.art-ring.r2 {
+  width: 73%; border-color: rgba(124,236,255,.18);
+  animation-direction: reverse; animation-duration: 22s;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.art-image {
+  width: 76%; height: 380px; overflow: hidden;
+  border-radius: 150px 150px 35px 35px;
+  border: 1px solid rgba(255,255,255,.2);
+  position: relative; z-index: 1;
+  transform: rotate(3deg);
+  animation: float 6s ease-in-out infinite;
+}
+.art-image img { height: 100%; object-fit: cover; filter: saturate(.8); }
+.art-image::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(8,8,16,.65), transparent 60%);
+}
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(3deg); }
+  50% { transform: translateY(-13px) rotate(1deg); }
+}
+.floating-tag {
+  position: absolute; z-index: 2; padding: 13px 15px;
+  background: rgba(18,17,31,.88); backdrop-filter: blur(15px);
+  border: 1px solid var(--line); border-radius: 12px;
+  font-size: 11px; box-shadow: 0 15px 40px #0005;
+}
+.tag-one { top: 17%; right: -2%; }
+.tag-two { bottom: 13%; left: -2%; }
+
+.marquee {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden; padding: 21px 0;
+}
+.marquee-track {
+  display: flex; width: max-content; gap: 35px;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track span { color: #aaa5c1; font-size: 12px; white-space: nowrap; }
+.marquee-track b { color: var(--purple); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+section { padding: 110px 0; }
+.section-head {
+  display: flex; justify-content: space-between;
+  align-items: end; gap: 25px; margin-bottom: 42px;
+}
+.eyebrow { color: var(--purple); font-size: 11px; margin-bottom: 17px; }
+.section-title {
+  font-size: clamp(37px, 5.2vw, 65px);
+  line-height: 1.04; letter-spacing: -.065em;
+}
+.section-note { max-width: 280px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; }
+.about-copy { color: var(--muted); font-size: 15px; line-height: 2; }
+.about-copy p + p { margin-top: 20px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat {
+  padding: 24px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 16px;
+}
+.stat strong { display: block; font-size: 27px; letter-spacing: -.06em; margin-bottom: 9px; }
+.stat span { color: var(--muted); font-size: 11px; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
+.skill {
+  background: var(--panel); border: 1px solid var(--line);
+  padding: 24px 19px; border-radius: 15px;
+  transition: transform .35s, border-color .35s;
+}
+.skill:hover { transform: translateY(-7px); border-color: #a78bfa88; }
+.skill-icon { font-size: 25px; margin-bottom: 24px; }
+.skill h3 { font-size: 14px; margin-bottom: 10px; }
+.skill p { color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+.project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.project-card {
+  border: 1px solid var(--line); border-radius: 18px;
+  background: var(--panel); overflow: hidden;
+  transition: transform .4s, border-color .4s;
+}
+.project-card:hover { transform: translateY(-7px); border-color: #a78bfa88; }
+.project-image { height: 280px; overflow: hidden; position: relative; }
+.project-image img {
+  height: 100%; object-fit: cover;
+  transition: transform .7s;
+}
+.project-card:hover .project-image img { transform: scale(1.06); }
+.project-number {
+  position: absolute; top: 15px; left: 15px;
+  background: #080810bd; border: 1px solid var(--line);
+  padding: 7px 10px; border-radius: 7px;
+  font: 10px "DM Mono", monospace;
+}
+.project-info { padding: 23px; }
+.project-info h3 { font-size: 22px; letter-spacing: -.04em; margin-bottom: 10px; }
+.project-info p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.tags span {
+  padding: 7px 10px; border: 1px solid var(--line);
+  border-radius: 7px; color: #c3bddb; font-size: 10px;
+}
+
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 220px; gap: 13px;
+}
+.gallery-item {
+  position: relative; overflow: hidden;
+  border-radius: 14px; border: 1px solid var(--line);
+  background: var(--panel);
+}
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item.wide { grid-column: span 2; }
+.gallery-item img {
+  height: 100%; object-fit: cover; opacity: .8;
+  transition: transform .7s, opacity .4s;
+}
+.gallery-item:hover img { transform: scale(1.07); opacity: 1; }
+.gallery-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 40px 17px 17px;
+  background: linear-gradient(transparent, #080810e8);
+  font-size: 13px;
+}
+.gallery-label small { display: block; color: #c3bddb; margin-top: 5px; font-size: 10px; }
+
+.contact-box {
+  border: 1px solid var(--line); border-radius: 24px;
+  background: radial-gradient(ellipse at 50% 120%, #57428b50, transparent 65%), var(--panel);
+  text-align: center; padding: 75px 25px;
+}
+.contact-box h2 {
+  font-size: clamp(40px, 7vw, 78px);
+  letter-spacing: -.075em; line-height: 1;
+}
+.contact-box p { color: var(--muted); margin: 23px auto; line-height: 1.8; font-size: 14px; max-width: 440px; }
+.contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+
+footer {
+  border-top: 1px solid var(--line); padding: 25px 0;
+}
+.footer-inner { display: flex; justify-content: space-between; gap: 15px; align-items: center; }
+footer p, footer a { color: var(--muted); font-size: 11px; }
+footer a:hover { color: var(--purple); }
+
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: .12s; }
+.delay-2 { transition-delay: .22s; }
+.delay-3 { transition-delay: .32s; }
+
+@media (min-width: 1400px) {
+  .container { width: min(1200px, 88%); }
+}
+@media (max-width: 850px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-art { min-height: 400px; max-width: 500px; width: 100%; margin: auto; }
+  .hero { padding-top: 145px; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .about-grid { gap: 30px; }
+  .project-image { height: 230px; }
+  .gallery-grid { grid-auto-rows: 180px; }
+}
+@media (max-width: 600px) {
+  nav { top: 8px; padding: 12px 15px; }
+  .menu-btn { display: block; }
+  .nav-links {
+    display: none; position: absolute; top: 60px;
+    left: 0; right: 0; padding: 22px;
+    background: #10101bf5; border: 1px solid var(--line);
+    border-radius: 14px; flex-direction: column; align-items: stretch;
+    gap: 22px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 14px; }
+  .nav-cta { text-align: center; }
+  .hero { min-height: auto; padding: 145px 0 65px; }
+  h1 { font-size: clamp(58px, 17vw, 88px); }
+  .hero-desc { font-size: 14px; }
+  .hero-art { min-height: 350px; margin-top: 25px; }
+  .art-image { height: 310px; }
+  section { padding: 75px 0; }
+  .section-head { align-items: start; flex-direction: column; }
+  .section-note { max-width: 100%; }
+  .about-grid { grid-template-columns: 1fr; }
+  .stats { gap: 10px; }
+  .stat { padding: 19px; }
+  .skills-grid { gap: 10px; }
+  .skill { padding: 19px 14px; }
+  .project-grid { grid-template-columns: 1fr; gap: 16px; }
+  .project-image { height: 235px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 155px; }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-item.wide { grid-column: span 2; }
+  .contact-box { padding: 55px 18px; }
+  .footer-inner { align-items: flex-start; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+
+<body>
+<div id="progress"></div>
+<div class="noise"></div>
+<div class="ambient"></div>
+<div class="ambient two"></div>
+
+<nav>
+  <a class="logo" href="#home">VIKAS<span>®</span></a>
+  <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">ABOUT</a>
+    <a href="#skills">SKILLS</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#gallery">GALLERY</a>
+    <a href="#contact" class="nav-cta">LET'S CONNECT ↗</a>
+  </div>
+</nav>
+
+<main>
+<section class="hero container" id="home">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="availability reveal">
+        <span class="dot"></span>
+        <span class="mono">STUDENT · CREATIVE THINKER</span>
+      </div>
+      <h1 class="reveal delay-1">IDEAS<br>INTO<br><span class="gradient-text">REALITY.</span></h1>
+      <p class="hero-desc reveal delay-2">
+        Hey, I'm Vikas. A Computer Science student exploring the world of AI,
+        creative technology, video editing, and building things for the web.
+      </p>
+      <div class="hero-actions reveal delay-3">
+        <a href="#projects" class="btn btn-primary">Explore my work ↗</a>
+        <a href="#about" class="btn btn-secondary">More about me ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-art reveal delay-2">
+      <div class="art-ring"></div>
+      <div class="art-ring r2"></div>
+      <div class="art-image">
+        <img
+          src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=85"
+          alt="Creative technology and electronic components"
+          fetchpriority="high">
+      </div>
+      <div class="floating-tag tag-one">✳ Exploring AI</div>
+      <div class="floating-tag tag-two">⌘ Building & creating</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track mono">
+    <span>ARTIFICIAL INTELLIGENCE <b>✳</b></span>
+    <span>WEB DEVELOPMENT <b>✳</b></span>
+    <span>CONTENT CREATION <b>✳</b></span>
+    <span>VIDEO EDITING <b>✳</b></span>
+    <span>CREATIVE THINKING <b>✳</b></span>
+    <span>ARTIFICIAL INTELLIGENCE <b>✳</b></span>
+    <span>WEB DEVELOPMENT <b>✳</b></span>
+    <span>CONTENT CREATION <b>✳</b></span>
+    <span>VIDEO EDITING <b>✳</b></span>
+    <span>CREATIVE THINKING <b>✳</b></span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow mono">01 / THE PERSON BEHIND THE SCREEN</p>
+        <h2 class="section-title">Curious mind.<br><span class="gradient-text">Creative soul.</span></h2>
+      </div>
+      <p class="section-note">Learning, experimenting, and turning ideas into projects one step at a time.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>
+          I'm a B.Tech Computer Science student who enjoys exploring technology
+          and finding creative ways to use it. I believe the best way to learn
+          is to build something, test it, improve it, and keep going.
+        </p>
+        <p>
+          From experimenting with AI tools and making websites to exploring
+          video editing and content creation, I'm always looking for something
+          new to learn.
+        </p>
+        <p>
+          My goal is to grow into a skilled software developer, work on
+          meaningful projects, and create digital experiences that people enjoy using.
+        </p>
+      </div>
+      <div class="stats reveal delay-1">
+        <div class="stat"><strong>01</strong><span>Computer Science student</span></div>
+        <div class="stat"><strong>AI +</strong><span>Technology enthusiast</span></div>
+        <div class="stat"><strong>CREATE</strong><span>Content & video editing</span></div>
+        <div class="stat"><strong>∞</strong><span>Things left to learn</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow mono">02 / WHAT I'M EXPLORING</p>
+        <h2 class="section-title">My creative<br>toolbox.</h2>
+      </div>
+      <p class="section-note">Skills I'm developing through practice, experimentation, and personal projects.</p>
+    </div>
+
+    <div class="skills-grid">
+      <article class="skill reveal">
+        <div class="skill-icon">⌘</div>
+        <h3>Web Development</h3>
+        <p>Creating responsive websites with HTML, CSS, and JavaScript.</p>
+      </article>
+      <article class="skill reveal delay-1">
+        <div class="skill-icon">✳</div>
+        <h3>Artificial Intelligence</h3>
+        <p>Exploring AI tools, useful workflows, and practical applications.</p>
+      </article>
+      <article class="skill reveal delay-2">
+        <div class="skill-icon">▶</div>
+        <h3>Video Editing</h3>
+        <p>Learning visual storytelling, editing techniques, and transitions.</p>
+      </article>
+      <article class="skill reveal delay-3">
+        <div class="skill-icon">◈</div>
+        <h3>Content Creation</h3>
+        <p>Exploring creative ideas, digital media, and online presentation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow mono">03 / SELECTED WORK</p>
+        <h2 class="section-title">Ideas I've<br><span class="gradient-text">been building.</span></h2>
+      </div>
+      <p class="section-note">A showcase of projects and concepts. Open each project link after adding your real URLs.</p>
+    </div>
+
+    <div class="project-grid">
+      <article class="project-card reveal">
+        <a href="#contact" aria-label="Ask about the SASTRA course website">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85"
+              alt="Laptop and digital workspace" loading="lazy">
+            <span class="project-number">PROJECT / 01</span>
+          </div>
+          <div class="project-info">
+            <h3>SASTRA — Learning Hub ↗</h3>
+            <p>A course discovery website concept that connects learners with useful video tutorials and learning resources.</p>
+            <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Education</span></div>
+          </div>
+        </a>
+      </article>
+
+      <article class="project-card reveal delay-1">
+        <a href="#contact" aria-label="Ask about the AI accessibility assistant">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=85"
+              alt="Artificial intelligence digital visualization" loading="lazy">
+            <span class="project-number">PROJECT / 02</span>
+          </div>
+          <div class="project-info">
+            <h3>AI Voice Assistant ↗</h3>
+            <p>An accessibility-focused concept exploring voice interaction and helpful digital assistance.</p>
+            <div class="tags"><span>Python</span><span>AI</span><span>Accessibility</span></div>
+          </div>
+        </a>
+      </article>
+
+      <article class="project-card reveal">
+        <a href="#contact" aria-label="Ask about the smart dustbin concept">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=1000&q=85"
+              alt="Recycling and waste management" loading="lazy">
+            <span class="project-number">PROJECT / 03</span>
+          </div>
+          <div class="project-info">
+            <h3>Smart Waste Monitor ↗</h3>
+            <p>A smart dustbin concept designed to notify waste collectors when a bin approaches capacity.</p>
+            <div class="tags"><span>IoT Concept</span><span>Sensors</span><span>Notifications</span></div>
+          </div>
+        </a>
+      </article>
+
+      <article class="project-card reveal delay-1">
+        <a href="#contact" aria-label="Ask about creative website experiments">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1000&q=85"
+              alt="Colorful graphic design and creative work" loading="lazy">
+            <span class="project-number">PROJECT / 04</span>
+          </div>
+          <div class="project-info">
+            <h3>Creative Experiments ↗</h3>
+            <p>A space for exploring web design, visual concepts, content ideas, and interactive experiences.</p>
+            <div class="tags"><span>Design</span><span>Creativity</span><span>Experiments</span></div>
+          </div>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow mono">04 / VISUAL INSPIRATION</p>
+        <h2 class="section-title">A world of<br>possibilities.</h2>
+      </div>
+      <p class="section-note">A visual moodboard of technology, digital creativity, and the process of making things.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item tall reveal">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=85"
+          alt="Electronic technology" loading="lazy">
+        <div class="gallery-label">Technology<small>Curiosity meets code</small></div>
+      </div>
+      <div class="gallery-item reveal delay-1">
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=85"
+          alt="Retro digital technology" loading="lazy">
+        <div class="gallery-label">Digital culture<small>Inspired by innovation</small></div>
+      </div>
+      <div class="gallery-item reveal delay-2">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=85"
+          alt="Digital data and analytics" loading="lazy">
+        <div class="gallery-label">Data & AI<small>Ideas through information</small></div>
+      </div>
+      <div class="gallery-item wide reveal">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=85"
+          alt="Laptop showing a developer workspace" loading="lazy">
+        <div class="gallery-label">Building for the web<small>From an idea to a working experience</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-box reveal">
+      <p class="eyebrow mono">05 / THE NEXT CHAPTER</p>
+      <h2>Let's make<br><span class="gradient-text">something real.</span></h2>
+      <p>
+        Have a project idea, a creative collaboration, or a cool technology
+        concept? Let's connect and explore what we can build.
+      </p>
+      <div class="contact-links">
+        <!-- Replace these example links with your actual profiles -->
+        <a class="btn btn-primary" href="mailto:YOUR_EMAIL@example.com">Email me ↗</a>
+        <a class="btn btn-secondary" href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="btn btn-secondary" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <a class="logo" href="#home">VIKAS<span>®</span></a>
+    <p>Designed with curiosity. Built for what's next.</p>
+    <a href="#home">BACK TO TOP ↑</a>
+  </div>
+</footer>
+
+<script>
+// Mobile navigation
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+  const isOpen = navLinks.classList.toggle("open");
+  menuBtn.setAttribute("aria-expanded", String(isOpen));
+  menuBtn.textContent = isOpen ? "×" : "☰";
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.textContent = "☰";
+  });
+});
+
+// Reveal elements smoothly while scrolling
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach(element => {
+  revealObserver.observe(element);
+});
+
+// Scroll progress indicator
+const progress = document.getElementById("progress");
+
+function updateProgress() {
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const percentage = scrollable > 0
+    ? (window.scrollY / scrollable) * 100
+    : 0;
+  progress.style.width = percentage + "%";
+}
+
+window.addEventListener("scroll", updateProgress, { passive: true });
+updateProgress();
+</script>
+</body>
+</html>
